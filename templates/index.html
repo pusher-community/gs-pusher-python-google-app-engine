@@ -21,12 +21,14 @@
 
 	<script>
 
-	var pusher = new Pusher('feaf18a411d3cb9216ee');
+	Pusher.log = function(message) {console.log(message)}
+
+	var pusher = new Pusher('PUSHER_APP_KEY');
 	var notificationsChannel = pusher.subscribe('notifications');
 
 	notificationsChannel.bind('new_notification', function(notification){
 		var message = notification.message;
-		toastr.success(message)
+		toastr.success(message);
 	});
 
 	var sendNotification = function(){
@@ -34,6 +36,7 @@
 		$.post('/notification', {message: text}).success(function(){
 			console.log('Notification sent!');
 		});
+
 	};
 	
 	$('button.submit-notification').on('click', sendNotification);
