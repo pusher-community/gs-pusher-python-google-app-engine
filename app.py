@@ -30,35 +30,5 @@ def trigger_notification():
 	p.trigger('notifications', 'new_notification', {'message': message})
 	return "Notification triggered!"
 
-@app.route("/pusher/auth", methods=['POST'])
-def pusher_authentication():
-  auth = p.authenticate(
-          channel=request.form['channel_name'],
-          socket_id=request.form['socket_id'],
-          custom_data={
-            u'user_id': u'1'
-          }
-  )
-  return json.dumps(auth)
-
-@app.route("/webhook", methods=['POST'])
-def pusher_webhook():
-  webhook = p.validate_webhook(
-    key=request.headers.get('X-Pusher-Key'),
-    signature=request.headers.get('X-Pusher-Signature'),
-    body=request.data
-  )
-
-  events = webhook['events']
-  
-  for event in webhook['events']:
-    if event['name'] == "channel_occupied":
-      print("Channel occupied: %s" % event["channel"])
-    elif event['name'] == "channel_vacated":
-      print("Channel vacated: %s" % event["channel"])
-
-  return "ok"
-
-
 if __name__ == "__main__":
     app.run(debug=True)
